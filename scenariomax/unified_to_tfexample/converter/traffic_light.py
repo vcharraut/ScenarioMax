@@ -1,5 +1,6 @@
 import numpy as np
 
+from scenariomax.core import types
 from scenariomax.unified_to_tfexample import constants
 from scenariomax.unified_to_tfexample.converter import datatypes
 
@@ -9,18 +10,15 @@ TRAFFIC_LIGHT_OFFSET = 25
 
 def from_traffic_light_state_to_int(traffic_light_state):
     mapping = {
-        "TRAFFIC_LIGHT_RED": 4,
-        "LANE_STATE_ARROW_STOP": 1,
-        "LANE_STATE_STOP": 4,
-        "LANE_STATE_FLASHING_STOP": 7,
-        "LANE_STATE_CAUTION": 5,
-        "LANE_STATE_ARROW_CAUTION": 2,
-        "LANE_STATE_FLASHING_CAUTION": 8,
-        "TRAFFIC_LIGHT_GREEN": 6,
-        "LANE_STATE_GO": 6,
-        "LANE_STATE_ARROW_GO": 3,
-        "TRAFFIC_LIGHT_UNKNOWN": 0,
-        "LANE_STATE_UNKNOWN": 0,
+        types.TRAFFIC_LIGHT_UNKNOWN: 0,
+        types.TRAFFIC_LIGHT_ARROW_RED: 1,
+        types.TRAFFIC_LIGHT_ARROW_YELLOW: 2,
+        types.TRAFFIC_LIGHT_ARROW_GREEN: 3,
+        types.TRAFFIC_LIGHT_RED: 4,
+        types.TRAFFIC_LIGHT_YELLOW: 5,
+        types.TRAFFIC_LIGHT_GREEN: 6,
+        types.TRAFFIC_LIGHT_FLASHING_RED: 7,
+        types.TRAFFIC_LIGHT_FLASHING_YELLOW: 8,
     }
 
     return mapping.get(traffic_light_state, 0)
