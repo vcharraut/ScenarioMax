@@ -26,14 +26,16 @@ def get_traffic_light_state(waymonic_state_value):
     """Convert waymonic traffic light state to unified format"""
     # Simple mapping - can be enhanced later if needed
     state_mapping = {
-        0: 0,  # UNKNOWN -> UNKNOWN
-        1: 1,  # STOP -> STOP
-        2: 2,  # CAUTION -> CAUTION
-        3: 3,  # GO -> GO
-        4: 4,  # ARROW_STOP -> ARROW_STOP
-        5: 5,  # ARROW_CAUTION -> ARROW_CAUTION
-        6: 6,  # ARROW_GO -> ARROW_GO
-        -1: 0,  # ABSENT -> UNKNOWN
+        0: types.TRAFFIC_LIGHT_UNKNOWN,
+        1: types.TRAFFIC_LIGHT_ARROW_RED,
+        2: types.TRAFFIC_LIGHT_ARROW_YELLOW,
+        3: types.TRAFFIC_LIGHT_ARROW_GREEN,
+        4: types.TRAFFIC_LIGHT_RED,
+        5: types.TRAFFIC_LIGHT_YELLOW,
+        6: types.TRAFFIC_LIGHT_GREEN,
+        7: types.TRAFFIC_LIGHT_FLASHING_RED,
+        8: types.TRAFFIC_LIGHT_FLASHING_YELLOW,
+        -1: types.TRAFFIC_LIGHT_UNKNOWN,
     }
     return state_mapping.get(waymonic_state_value, 0)
 
@@ -247,10 +249,7 @@ class WaymonicTLSGenerator:
             for i, approach in enumerate(intersection):
                 for lane in approach:
                     direction_set = {conn.direction for conn in lane.injunction_lanes}
-                    try:
-                        phase = next(phase for phase in tls_state[i] if list(direction_set)[0] in phase)
-                    except StopIteration:
-                        continue
+                    phase = next(phase for phase in tls_state[i] if list(direction_set)[0] in phase)
                     state = tls_state[i][phase]
                     arrow_ever = any(
                         st in [WaymonicTLS.ARROW_GO, WaymonicTLS.ARROW_CAUTION, WaymonicTLS.ARROW_STOP]
@@ -265,7 +264,7 @@ class WaymonicTLSGenerator:
                         unprotected_left,
                     )
 
-                    for i, conn in enumerate(lane.injunction_lanes):
+                    for conn in lane.injunction_lanes:
                         # [intersection itself]
                         conn.new_tls[t] = state
                         #  [tls data by time]
