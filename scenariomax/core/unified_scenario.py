@@ -77,6 +77,22 @@ class UnifiedScenario(dict):
     }
     """
 
+    @classmethod
+    def from_dict(cls, data: dict) -> "UnifiedScenario":
+        """Create a UnifiedScenario from a dictionary."""
+        metadata = data.get("metadata", {}) or {}
+
+        scenario = cls(
+            scenario_id=data.get("id", ""),
+            dataset_name=metadata.get("dataset_name", data.get("dataset_name", "")),
+            dataset_version=metadata.get("dataset_version", data.get("dataset_version", "")),
+        )
+        for key, value in data.items():
+            scenario[key] = value
+
+        return scenario
+
+
     def __init__(self, scenario_id: str = "", dataset_name: str = "", dataset_version: str = ""):
         super().__init__()
         self["id"] = scenario_id
