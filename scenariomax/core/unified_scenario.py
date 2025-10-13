@@ -92,7 +92,6 @@ class UnifiedScenario(dict):
 
         return scenario
 
-
     def __init__(self, scenario_id: str = "", dataset_name: str = "", dataset_version: str = ""):
         super().__init__()
         self["id"] = scenario_id

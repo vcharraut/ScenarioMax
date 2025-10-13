@@ -52,9 +52,9 @@ def postprocess_gpudrive(
             )
 
             if not isinstance(unified_scenario, UnifiedScenario):
-                _unified_scenario = UnifiedScenario.from_dict(unified_scenario)
+                unified_scenario = UnifiedScenario.from_dict(unified_scenario)
 
-            scenario_json = convert_to_json.convert(_unified_scenario)
+            scenario_json = convert_to_json.convert(unified_scenario)
 
             if scenario_json is not None:
                 with open(os.path.join(output_path, f"{unified_scenario.export_file_name}.json"), "w") as f:
